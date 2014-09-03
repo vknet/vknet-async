@@ -9,7 +9,7 @@ namespace Injector
 	static class Program
 	{
 		const string AttributeName = "ApiVersionAttribute";
-		const string CategoriesNamespace = "VkNetAsync.Categories";
+		const string CategoriesNamespace = "VkNetAsync.API.Categories";
 		
 		static void Main(string[] args)
 		{
