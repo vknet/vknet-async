@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\DateTimeExTests.cs" />
+    <Compile Include="Service\VkParametersTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
