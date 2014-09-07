@@ -122,6 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ApiVersionAttribute.cs" />
+    <Compile Include="Service\Exception\VkException.cs" />
+    <Compile Include="Service\VkResponse.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\VkApi.cs" />
