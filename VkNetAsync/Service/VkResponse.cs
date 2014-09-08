@@ -11,7 +11,7 @@ namespace VkNetAsync.Service
 			_token = response;
 		}
 
-		public T As <T>()
+		public T ToObject <T>()
 		{
 			return _token.ToObject<T>();
 		}
