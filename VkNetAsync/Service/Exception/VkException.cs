@@ -5,15 +5,20 @@ namespace VkNetAsync.Service.Exception
 {
 	public class VkException : System.Exception
 	{
+		/// <summary>
+		/// Код ошибки, полученный от сервера ВКонтакте.
+		/// </summary>
+		public int ErrorCode { get; private set; }
+
 		public VkException()
 		{
 		}
 
-		public VkException(string message) : base(message)
+		public VkException(string message, int code) : base(message)
 		{
 		}
 
-		public VkException(string message, System.Exception innerException) : base(message, innerException)
+		public VkException(string message, int code, System.Exception innerException) : base(message, innerException)
 		{
 		}
 

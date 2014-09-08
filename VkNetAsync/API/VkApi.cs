@@ -35,22 +35,20 @@ namespace VkNetAsync.API
 		}
 
 
-		public async Task<VkResponse> Call([NotNull] string method, [CanBeNull] VkParameters parameters = null, CancellationToken token = default(CancellationToken))
+		public async Task<JToken> Call([NotNull] string method, [CanBeNull] VkParameters parameters = null, CancellationToken token = default(CancellationToken))
 		{
 			Contract.Requires<ArgumentNullException>(method != null);
 			Contract.Requires<ArgumentException>(method.Length > 0);
-			Contract.Ensures(Contract.Result<VkResponse>() != null);
-
+			
 			(parameters ?? new VkParameters()).Add("access_token", AccessToken);
 			
 			var uri = new Uri(string.Format("{0}{1}?{2}", VkUrl, method, parameters));
 			var response = JObject.Parse(await _transport.Post(uri, token));
 			
-			//TODO: use exceptions derived from VkException, deserealise using JSON.NET
 			if (response["error"] != null)
-				throw new VkException(response["error"].ToString(Formatting.Indented));
+				throw VkErrorConverter.Convert((JObject)response["error"]);
 			
-			return new VkResponse(response["response"]);
+			return response["response"];
 		}
 	}
 }

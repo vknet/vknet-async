@@ -122,8 +122,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ApiVersionAttribute.cs" />
+    <Compile Include="Service\Exception\AccessDeniedException.cs" />
+    <Compile Include="Service\Exception\AccessTokenInvalidException.cs" />
+    <Compile Include="Service\Exception\CaptchaNeededException.cs" />
+    <Compile Include="Service\Exception\InvalidParameterException.cs" />
+    <Compile Include="Service\Exception\TooManyRequestsException.cs" />
+    <Compile Include="Service\Exception\UserAuthorizationFailException.cs" />
+    <Compile Include="Service\Exception\VkApiAuthorizationException.cs" />
+    <Compile Include="Service\Exception\VkErrorConverter.cs" />
     <Compile Include="Service\Exception\VkException.cs" />
-    <Compile Include="Service\VkResponse.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\VkApi.cs" />
