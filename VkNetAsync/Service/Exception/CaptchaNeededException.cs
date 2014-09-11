@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Runtime.Serialization;
 using VkNetAsync.Annotations;
 
 namespace VkNetAsync.Service.Exception
@@ -8,7 +7,6 @@ namespace VkNetAsync.Service.Exception
 	/// <summary>
     /// Исключение, выбрасываемое при необходимости ввода капчи для вызова метода
     /// </summary>
-    [Serializable]
     public class CaptchaNeededException : VkException
     {
         /// <summary>
@@ -35,11 +33,6 @@ namespace VkNetAsync.Service.Exception
 			
 			Sid = sid;
             Img = img;
-		}
-
-		protected CaptchaNeededException([NotNull] SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-
 		}
     }
 }

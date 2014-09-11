@@ -1,7 +1,4 @@
-﻿using System.Runtime.Serialization;
-using VkNetAsync.Annotations;
-
-namespace VkNetAsync.Service.Exception
+﻿namespace VkNetAsync.Service.Exception
 {
 	public class VkException : System.Exception
 	{
@@ -22,10 +19,6 @@ namespace VkNetAsync.Service.Exception
 		public VkException(string message, int code, System.Exception innerException) : base(message, innerException)
 		{
 			ErrorCode = code;
-		}
-
-		protected VkException([NotNull] SerializationInfo info, StreamingContext context) : base(info, context)
-		{
 		}
 	}
 }

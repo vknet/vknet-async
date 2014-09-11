@@ -1,13 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-using VkNetAsync.API;
-
-namespace VkNetAsync.Service.Exception
+﻿namespace VkNetAsync.Service.Exception
 {
 	/// <summary>
     /// Исключение, которое выбрасывается при попытке неудачной авторизации, когда указан неправильный логин или пароль.
     /// </summary>
-    [Serializable]
+    
     public class VkApiAuthorizationException : VkException
     {
         /// <summary>
@@ -31,17 +27,6 @@ namespace VkNetAsync.Service.Exception
         {
             Email = email;
             Password = password;
-        }
-
-
-        /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="AccessTokenInvalidException"/> на основе ранее сериализованных данных.
-        /// </summary>
-        /// <param name="info">Содержит все данные, необходимые для десериализации.</param>
-        /// <param name="context">Описывает источник и назначение данного сериализованного потока и предоставляет дополнительный, 
-        /// определяемый вызывающим, контекст.</param>
-        protected VkApiAuthorizationException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
         }
     }
 }
