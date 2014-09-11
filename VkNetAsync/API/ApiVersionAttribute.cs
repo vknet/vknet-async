@@ -21,7 +21,7 @@ namespace VkNetAsync.API
 		/// <param name="version">Версия API</param>
 		public ApiVersionAttribute(string version)
 		{
-			Contract.Requires<FormatException>(Regex.IsMatch(version, @"[0-9]*.[0-9]*"));
+			Contract.Requires<FormatException>(Regex.IsMatch(version, @"^[0-9]*.[0-9]*$"));
 			Version = version;
 		}
 

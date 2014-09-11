@@ -16,10 +16,12 @@ namespace VkNetAsync.Service.Exception
 
 		public VkException(string message, int code) : base(message)
 		{
+			ErrorCode = code;
 		}
 
 		public VkException(string message, int code, System.Exception innerException) : base(message, innerException)
 		{
+			ErrorCode = code;
 		}
 
 		protected VkException([NotNull] SerializationInfo info, StreamingContext context) : base(info, context)

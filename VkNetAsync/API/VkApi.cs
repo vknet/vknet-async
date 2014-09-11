@@ -26,7 +26,7 @@ namespace VkNetAsync.API
 			Contract.Requires<ArgumentNullException>(transport != null);
 			Contract.Requires<ArgumentOutOfRangeException>(userId > 0);
 			Contract.Requires<ArgumentNullException>(accessToken != null);
-			Contract.Requires<FormatException>(Regex.IsMatch(accessToken, @"[0-9a-f]+"));
+			Contract.Requires<FormatException>(Regex.IsMatch(accessToken, @"^[0-9a-f]+$"));
 
 			_transport = transport;
 
@@ -40,7 +40,7 @@ namespace VkNetAsync.API
 			Contract.Requires<ArgumentNullException>(method != null);
 			Contract.Requires<ArgumentException>(method.Length > 0);
 			
-			(parameters ?? new VkParameters()).Add("access_token", AccessToken);
+			(parameters ?? (parameters = new VkParameters())).Add("access_token", AccessToken);
 			
 			var uri = new Uri(string.Format("{0}{1}?{2}", VkUrl, method, parameters));
 			var response = JObject.Parse(await _transport.Post(uri, token));
