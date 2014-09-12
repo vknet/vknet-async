@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ApiVersionAttribute.cs" />
+    <Compile Include="API\Authorisation\Authoriser.cs" />
     <Compile Include="Service\Exception\AccessDeniedException.cs" />
     <Compile Include="Service\Exception\AccessTokenInvalidException.cs" />
     <Compile Include="Service\Exception\CaptchaNeededException.cs" />
