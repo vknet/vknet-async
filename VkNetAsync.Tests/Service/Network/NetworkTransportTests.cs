@@ -29,7 +29,7 @@ namespace VkNetAsync.Tests.Service.Network
 			var json = Newtonsoft.Json.Linq.JObject.Parse(await networkTransport.Post(new Uri(@"https://api.vk.com/method/utils.getServerTime")));
 			var now = DateTime.Now.ToUnixTime();
 			
-			Assert.That((long)json["response"], Is.GreaterThan(now - 10).And.LessThan(now + 10));
+			Assert.That((long)json["response"], Is.GreaterThan(0));
 		}
 
 		[Test]
