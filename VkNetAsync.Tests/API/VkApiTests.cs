@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using Newtonsoft.Json;
+using Nito.AsyncEx;
 using NUnit.Framework;
 using VkNetAsync.API;
 using VkNetAsync.Service;
@@ -143,6 +145,64 @@ namespace VkNetAsync.Tests.API
 
 			Assert.That((await api.Call("method.name", new VkParameters(){{"parameter", "value"}})).ToString(Formatting.None), Is.EqualTo("{\"val\":2}"));
 			mock.Verify(t => t.Post(new Uri(@"https://api.vk.com/method/method.name?parameter=value&access_token=abc"), CancellationToken.None), Times.Once);
+		}
+
+		[Test]
+		[Timeout(5000)]
+		public void Call_Concurrent()
+		{
+			const string response = @"{'response':{'val':2}}";
+			var mock = new Mock<INetworkTransport>(MockBehavior.Strict);
+			mock.Setup(t => t.Post(It.IsAny<Uri>(), CancellationToken.None)).ReturnsAsync(response);
+			var api = new VkApi(1, "abc", mock.Object);
+
+			var stopwatch = Stopwatch.StartNew();
+			Func<Task> callLoop = async () =>
+										{
+											for (int i = 0; i < 4; i++)
+											{
+												await api.Call("method.name");
+												Console.WriteLine("i = {0} at task {1:00}, elapsed {2}", i, Thread.CurrentThread.ManagedThreadId, stopwatch.Elapsed);
+											}
+										};
+			Task.WaitAll(Task.Run(callLoop),
+						 Task.Run(callLoop),
+						 Task.Run(callLoop));
+			stopwatch.Stop();
+
+			Assert.That(Math.Abs(stopwatch.Elapsed.TotalSeconds - (12 * (1f / 3f))) < 1);
+
+			mock.Verify(t => t.Post(It.IsAny<Uri>(), CancellationToken.None), Times.Exactly(12));
+		}
+
+		[Test]
+		[Timeout(5000)]
+		public void Call_CancelConcurrent()
+		{
+			const string response = @"{'response':{'val':2}}";
+			var tokenSource = new CancellationTokenSource();
+			
+			var mock = new Mock<INetworkTransport>(MockBehavior.Strict);
+			mock.Setup(t => t.Post(It.IsAny<Uri>(), tokenSource.Token)).ReturnsAsync(response);
+			var api = new VkApi(1, "abc", mock.Object);
+
+
+			Func<Task> callLoop = async () =>
+			{
+				for (int i = 0; i < 4; i++)
+					await api.Call("method.name", token: tokenSource.Token);
+			};
+			tokenSource.CancelAfter(TimeSpan.FromSeconds(2));
+			var stopwatch = Stopwatch.StartNew();
+			Assert.Throws<AggregateException>(() => Task.WaitAll(new[]
+						 {
+							 Task.Run(callLoop, tokenSource.Token),
+							 Task.Run(callLoop, tokenSource.Token),
+							 Task.Run(callLoop, tokenSource.Token)
+						 }));
+			stopwatch.Stop();
+
+			Assert.That(Math.Abs(stopwatch.Elapsed.TotalSeconds - 2), Is.LessThan(0.3));
 		}
 
 		#endregion
