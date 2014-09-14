@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using VkNetAsync.Annotations;
@@ -37,31 +38,36 @@ namespace VkNetAsync.API.VkTypes.Enums
 		#region Static members
 
 		// ReSharper disable once StaticFieldInGenericType
-		private static readonly IList<TExclusive> PossibleValues = new List<TExclusive>();
+		private static readonly IList<TExclusive> _possibleValues = new List<TExclusive>();
+
+		protected static IList<TExclusive> PossibleValues
+		{
+			get { return new ReadOnlyCollection<TExclusive>(_possibleValues); }
+		}
 
 		protected static TExclusive RegisterPossibleValue(long value, [NotNull] string name)
 		{
 			Contract.Requires<ArgumentNullException>(name != null);
 			Contract.Requires<ArgumentException>(name.Length > 0);
 
-			if (PossibleValues.Any(member => member.Value == value))
+			if (_possibleValues.Any(member => member.Value == value))
 				throw new ArgumentException(string.Format("Element of type {0} with value {1} is already registered ({2}).",
 														  typeof(TExclusive).FullName, value, FromValue(value)), 
 											"value");
 
-			if (PossibleValues.Any(member => member.Name == name))
+			if (_possibleValues.Any(member => member.Name == name))
 				throw new ArgumentException(string.Format("Element of type {0} with name {1} is not registered ({2}).",
 														  typeof(TExclusive).FullName, name, FromName(name)),
 											"name");
 
-			PossibleValues.Add(new TExclusive { _member = new EnumMember(value, name) });
+			_possibleValues.Add(new TExclusive { _member = new EnumMember(value, name) });
 
 			return FromValue(value);
 		}
 
 		protected static TExclusive FromValue(long value)
 		{
-			var enumMember = PossibleValues.SingleOrDefault(member => member.Value == value);
+			var enumMember = _possibleValues.SingleOrDefault(member => member.Value == value);
 			if (enumMember == null)
 				throw new ArgumentOutOfRangeException("value", string.Format("Element of type {0} with value {1} is not registered.", typeof (TExclusive).FullName, value));
 			
@@ -73,7 +79,7 @@ namespace VkNetAsync.API.VkTypes.Enums
 			Contract.Requires<ArgumentNullException>(name != null);
 			Contract.Requires<ArgumentException>(name.Length > 0);
 
-			var enumMember = PossibleValues.SingleOrDefault(member => member.Name == name);
+			var enumMember = _possibleValues.SingleOrDefault(member => member.Name == name);
 			if (enumMember == null)
 				throw new ArgumentOutOfRangeException("name", string.Format("Element of type {0} with name {1} is not registered.", typeof(TExclusive).FullName, name));
 
