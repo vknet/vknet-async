@@ -5,7 +5,7 @@ using VkNetAsync.API.VkTypes.Enums;
 namespace VkNetAsync.Tests.API.VkTypes.Enums
 {
 	[TestFixture]
-	public class TestedExclusiveEnum : ExclusiveEnum<TestedExclusiveEnum>
+	public class ExclusiveEnumTests : ExclusiveEnum<ExclusiveEnumTests>
 	{
 		#region RegistrationTests
 
@@ -43,11 +43,11 @@ namespace VkNetAsync.Tests.API.VkTypes.Enums
 		#endregion
 
 
-		private static readonly TestedExclusiveEnum MemberA =   RegisterPossibleValue(0, "memberA_name");
-		private static readonly TestedExclusiveEnum MemberB =   RegisterPossibleValue(10, "memberB_name");
-		private static readonly TestedExclusiveEnum MemberC =   RegisterPossibleValue(-5, "memberC_name");
-		private static readonly TestedExclusiveEnum MemberMax = RegisterPossibleValue(long.MaxValue, "memberMax_name");
-		private static readonly TestedExclusiveEnum MemberMin = RegisterPossibleValue(long.MinValue, "memberMin_name");
+		private static readonly ExclusiveEnumTests MemberA =   RegisterPossibleValue(0, "memberA_name");
+		private static readonly ExclusiveEnumTests MemberB =   RegisterPossibleValue(10, "memberB_name");
+		private static readonly ExclusiveEnumTests MemberC =   RegisterPossibleValue(-5, "memberC_name");
+		private static readonly ExclusiveEnumTests MemberMax = RegisterPossibleValue(long.MaxValue, "memberMax_name");
+		private static readonly ExclusiveEnumTests MemberMin = RegisterPossibleValue(long.MinValue, "memberMin_name");
 
 		#region FromValue
 
