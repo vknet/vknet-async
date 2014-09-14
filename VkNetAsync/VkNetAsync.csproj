@@ -127,6 +127,8 @@
   <ItemGroup>
     <Compile Include="API\ApiVersionAttribute.cs" />
     <Compile Include="API\Authorisation\Authoriser.cs" />
+    <Compile Include="API\VkTypes\Enums\ExclusiveEnum.cs" />
+    <Compile Include="API\VkTypes\Enums\FilteredEnum.cs" />
     <Compile Include="Service\Exception\AccessDeniedException.cs" />
     <Compile Include="Service\Exception\AccessTokenInvalidException.cs" />
     <Compile Include="Service\Exception\CaptchaNeededException.cs" />
@@ -147,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\Categories\" />
+    <Folder Include="API\VkTypes\Enums\Exclusives\" />
+    <Folder Include="API\VkTypes\Enums\Filters\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
