@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,8 +49,10 @@ namespace VkNetAsync.API
 
 			(parameters ?? (parameters = new VkParameters())).Add("access_token", AccessToken);
 
-			var uri = new Uri(string.Format("{0}{1}?{2}", VkUrl, method, parameters));
-			var response = JObject.Parse(await Call(uri, token));
+			var uri = new Uri(string.Format("{0}{1}", VkUrl, method));
+			byte[] parametersData = Encoding.UTF8.GetBytes(parameters.ToString());
+
+			var response = JObject.Parse(await Call(uri, parametersData, token));
 
 			if (response["error"] != null)
 				throw VkErrorConverter.Convert((JObject)response["error"]);
@@ -57,7 +60,7 @@ namespace VkNetAsync.API
 			return response["response"];
 		}
 
-		private async Task<string> Call(Uri uri, CancellationToken token)
+		private async Task<string> Call(Uri uri, byte[] data, CancellationToken token)
 		{
 			using (await _callLock.LockAsync(token))
 			{
@@ -75,7 +78,7 @@ namespace VkNetAsync.API
 					_lastCallTime = DateTime.UtcNow;
 				}
 
-				return await _transport.Post(uri, token);
+				return (await _transport.Post(uri, data, token)).ResponseData;
 			}
 		}
 	}

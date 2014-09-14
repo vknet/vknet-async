@@ -111,6 +111,9 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.8\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -127,6 +130,7 @@
   <ItemGroup>
     <Compile Include="API\ApiVersionAttribute.cs" />
     <Compile Include="API\Authorisation\Authoriser.cs" />
+    <Compile Include="API\Authorisation\ManualAuthoriser.cs" />
     <Compile Include="API\VkTypes\Enums\ExclusiveEnum.cs" />
     <Compile Include="API\VkTypes\Enums\FilteredEnum.cs" />
     <Compile Include="API\VkTypes\Enums\Filters\Settings.cs" />
@@ -135,8 +139,7 @@
     <Compile Include="Service\Exception\CaptchaNeededException.cs" />
     <Compile Include="Service\Exception\InvalidParameterException.cs" />
     <Compile Include="Service\Exception\TooManyRequestsException.cs" />
-    <Compile Include="Service\Exception\UserAuthorizationFailException.cs" />
-    <Compile Include="Service\Exception\VkApiAuthorizationException.cs" />
+    <Compile Include="Service\Exception\AuthorizationFailedException.cs" />
     <Compile Include="Service\Exception\VkErrorConverter.cs" />
     <Compile Include="Service\Exception\VkException.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -146,6 +149,7 @@
     <Compile Include="Service\Network\INetworkTransport.cs" />
     <Compile Include="Service\Network\INetworkTransportContract.cs" />
     <Compile Include="Service\Network\NetworkTransport.cs" />
+    <Compile Include="Service\Network\Response.cs" />
     <Compile Include="Service\VkParameters.cs" />
   </ItemGroup>
   <ItemGroup>

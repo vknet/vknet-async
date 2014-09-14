@@ -88,11 +88,6 @@
 		public static readonly Settings Statistic = RegisterPossibleValue(1 << 20, "stats");
 
 		/// <summary>
-		/// Доступ к email пользователя. Доступно только для сайтов.
-		/// </summary>
-		public static readonly Settings Email = RegisterPossibleValue(1 << 22, "email");
-
-		/// <summary>
 		/// Доступ к API в любое время со стороннего сервера. 
 		/// </summary>
 		public static readonly Settings Offline = RegisterPossibleValue(1 << 16, "offline");
@@ -102,7 +97,7 @@
 		/// </summary>
 		public static readonly Settings All =
 			Notify | Friends | Photos | Audio | Video | Documents | Notes | Pages | Status
-			| AddLinkToLeftMenu | Wall | Groups | Messages | Notifications | Statistic | Ads | Email;
+			| AddLinkToLeftMenu | Wall | Groups | Messages | Notifications | Statistic | Ads;
 
 		/// <summary>
 		/// Доступ ко всем возможным операциям без ограничений по времени (т.е. с флагом <see cref="Offline"/>).

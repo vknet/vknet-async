@@ -16,7 +16,7 @@ namespace VkNetAsync.Service.Exception
 			switch (code)
 			{
 				case 5:
-					return new UserAuthorizationFailException(message, code);
+					return new AuthorizationFailedException(message, code);
 
 				case 14:
 					var sid = (long)error["captcha_sid"];

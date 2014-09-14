@@ -8,7 +8,14 @@ namespace VkNetAsync.Service.Network
 	[ContractClassFor(typeof (INetworkTransport))]
 	abstract class INetworkTransportContract : INetworkTransport
 	{
-		Task<string> INetworkTransport.Post(Uri uri, CancellationToken token)
+		public Task<Response> Post(Uri uri, byte[] data, CancellationToken token = new CancellationToken())
+		{
+			Contract.Requires<ArgumentNullException>(uri != null);
+
+			throw new System.NotImplementedException();
+		}
+
+		public Task<Response> Get(Uri uri, CancellationToken token)
 		{
 			Contract.Requires<ArgumentNullException>(uri != null);
 			

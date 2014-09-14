@@ -9,6 +9,8 @@ namespace VkNetAsync.Service.Network
 	[ContractClass(typeof (INetworkTransportContract))]
 	public interface INetworkTransport
 	{
-		Task<string> Post([NotNull]Uri url, CancellationToken token = default(CancellationToken));
+		Task<Response> Post([NotNull]Uri uri, [CanBeNull] byte[] data, CancellationToken token = default(CancellationToken));
+		
+		Task<Response> Get([NotNull]Uri uri, CancellationToken token = default(CancellationToken));
 	}
 }

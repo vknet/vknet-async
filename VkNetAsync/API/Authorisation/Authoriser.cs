@@ -30,7 +30,7 @@ namespace VkNetAsync.API.Authorisation
 		public VkApi API
 		{
 			get { return _api; }
-			private set
+			protected set
 			{
 				if (Equals(value, _api)) return;
 				if ((_api = value) != null)
