@@ -63,7 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Authorisation\ManualAuthoriserTests.cs" />
     <Compile Include="API\VkApiTests.cs" />
     <Compile Include="API\VkTypes\Enums\FilteredEnumTests.cs" />
     <Compile Include="API\VkTypes\Enums\ExclusiveEnumTests.cs" />
@@ -81,7 +80,9 @@
       <Name>VkNetAsync.Portable</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="API\Authorisation\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
