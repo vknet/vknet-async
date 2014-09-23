@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VkNetAsync.Annotations;
 using VkNetAsync.API.VkTypes.Enums.Filters;
 using VkNetAsync.Service.Exception;
@@ -34,22 +36,48 @@ namespace VkNetAsync.API.Authorisation
 			await AuthoriseInternal(appId, login, password, settings, cancellationToken);
 		}
 
-		private async Task AuthoriseInternal(long appId, string login, string password, Settings settings,
-											 CancellationToken cancellationToken)
+		private async Task AuthoriseInternal(long appId, string login, string password, Settings settings, CancellationToken cancellationToken)
 		{
 			var loginPageUri = new Uri(
 				string.Format(@"https://oauth.vk.com/authorize?client_id={0}&scope={1}&redirect_uri=https://oauth.vk.com/blank.html&display=mobile&v=5.24&response_type=token",
 							  appId, settings.Value));
-
 			var loginPage = await Transport.Get(loginPageUri, cancellationToken);
+
+			ThrowIfLoginPageIncorrect(loginPage);
+
 			var loginParameters = GetLoginRequestParametersFromLoginPage(loginPage.ResponseData, login, password);
+			var loginResponse = await Transport.Post(loginParameters.Item1, loginParameters.Item2, cancellationToken);
+			
+			ThrowIfLoginFailed(loginResponse);
 
-			var permissionsPage = await Transport.Post(loginParameters.Item1, loginParameters.Item2, cancellationToken);
-			var grantAccessUri = GetGrantAccessUriFromPermissionsPage(permissionsPage.ResponseData);
 
+			var grantAccessUri = GetGrantAccessUriFromPermissionsPage(loginResponse.ResponseData);
 			var accessUri = (await Transport.Post(grantAccessUri, null, cancellationToken)).Uri;
 			
 			AuthoriseFromUri(accessUri);
+		}
+
+		private static void ThrowIfLoginPageIncorrect(Response response)
+		{
+			try
+			{
+				JToken token = JToken.Parse(response.ResponseData);
+				if (token["error"] != null && token["error_description"] != null)
+					throw new AuthorizationFailedException(string.Format("Authorisation failed: {0}{1}", token["error"], token["error_description"]), 0);
+				throw new AuthorizationFailedException(string.Format("Response: {0}", token.ToString(Formatting.None)), 0);
+			}
+			catch (JsonReaderException) { } // supress if response is not a json
+		}
+
+		private static void ThrowIfLoginFailed(Response response)
+		{
+			var htmlDocument = new HtmlDocument();
+			htmlDocument.LoadHtml(response.ResponseData);
+			HtmlNode form = htmlDocument.DocumentNode.Descendants("form").Single().ParentNode;
+			var serviceNode = form.Descendants("div").SingleOrDefault(node => node.Attributes["class"].Value == "service_msg service_msg_warning");
+			if(serviceNode != null)
+				throw new AuthorizationFailedException(string.Format("Authorisation failed: {0}", serviceNode.InnerText), 0);
+
 		}
 
 		private void AuthoriseFromUri(Uri accessUri)
