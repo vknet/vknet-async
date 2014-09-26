@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Nito.AsyncEx;
 using VkNetAsync.Annotations;
 using VkNetAsync.Service;
+using VkNetAsync.Service.Captcha;
 using VkNetAsync.Service.Exception;
 using VkNetAsync.Service.Network;
 
@@ -23,12 +24,18 @@ namespace VkNetAsync.API
 
 		private readonly INetworkTransport _transport;
 
+		private readonly ICaptchaResolver _captchaResolver;
+		public ICaptchaResolver CaptchaResolver
+		{
+			get { return _captchaResolver; }
+		}
+
 		public long UserId { get; private set; }
 
 		public string AccessToken { get; private set; }
 
 
-		internal VkApi(long userId, string accessToken, [NotNull] INetworkTransport transport)
+		internal VkApi(long userId, string accessToken, [NotNull] INetworkTransport transport, [CanBeNull] ICaptchaResolver captchaResolver = null)
 		{
 			Contract.Requires<ArgumentNullException>(transport != null);
 			Contract.Requires<ArgumentOutOfRangeException>(userId > 0);
@@ -36,6 +43,7 @@ namespace VkNetAsync.API
 			Contract.Requires<FormatException>(Regex.IsMatch(accessToken, @"^[0-9a-f]+$"));
 
 			_transport = transport;
+			_captchaResolver = captchaResolver;
 
 			UserId = userId;
 			AccessToken = accessToken;
@@ -52,7 +60,7 @@ namespace VkNetAsync.API
 			var uri = new Uri(string.Format("{0}{1}", VkUrl, method));
 			byte[] parametersData = Encoding.UTF8.GetBytes(parameters.ToString());
 
-			var response = JObject.Parse(await Call(uri, parametersData, token));
+			var response = JObject.Parse(await Call(uri, parametersData, token).ConfigureAwait(false));
 
 			if (response["error"] != null)
 				throw VkErrorConverter.Convert((JObject)response["error"]);
@@ -70,7 +78,7 @@ namespace VkNetAsync.API
 					{
 						var delay = (_lastCallTime.Value - DateTime.UtcNow) + _requestsTimeout;
 						if (delay > TimeSpan.Zero)
-							await Task.Delay(delay, token);
+							await Task.Delay(delay, token).ConfigureAwait(false);
 					}
 				}
 				finally
@@ -78,7 +86,7 @@ namespace VkNetAsync.API
 					_lastCallTime = DateTime.UtcNow;
 				}
 
-				return (await _transport.Post(uri, data, token)).ResponseData;
+				return (await _transport.Post(uri, data, token).ConfigureAwait(false)).ResponseData;
 			}
 		}
 	}

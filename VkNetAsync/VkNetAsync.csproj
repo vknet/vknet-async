@@ -134,9 +134,14 @@
     <Compile Include="API\VkTypes\Enums\ExclusiveEnum.cs" />
     <Compile Include="API\VkTypes\Enums\FilteredEnum.cs" />
     <Compile Include="API\VkTypes\Enums\Filters\Settings.cs" />
+    <Compile Include="Service\Captcha\Captcha.cs" />
+    <Compile Include="Service\Captcha\FuncCaptchaResolver.cs" />
+    <Compile Include="Service\Captcha\ICaptchaResolver.cs" />
+    <Compile Include="Service\Captcha\ICaptchaResolverContract.cs" />
     <Compile Include="Service\Exception\AccessDeniedException.cs" />
     <Compile Include="Service\Exception\AccessTokenInvalidException.cs" />
     <Compile Include="Service\Exception\CaptchaNeededException.cs" />
+    <Compile Include="Service\Captcha\CaptchaResolvingCancelledException.cs" />
     <Compile Include="Service\Exception\InvalidParameterException.cs" />
     <Compile Include="Service\Exception\TooManyRequestsException.cs" />
     <Compile Include="Service\Exception\AuthorizationFailedException.cs" />

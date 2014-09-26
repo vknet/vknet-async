@@ -21,7 +21,7 @@ namespace VkNetAsync.Service.Exception
 				case 14:
 					var sid = (long)error["captcha_sid"];
 					var img = (string)error["captcha_img"];
-					return new CaptchaNeededException(message, code, sid, new Uri(img));
+					return new CaptchaNeededException(message, new Captcha.Captcha(sid, new Uri(img)));
 
 				case 4:	  // Incorrect signature.
 				case 100: // One of the parameters specified was missing or invalid.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using VkNetAsync.Annotations;
+using VkNetAsync.Service.Captcha;
 
 namespace VkNetAsync.Service.Exception
 {
@@ -10,29 +11,24 @@ namespace VkNetAsync.Service.Exception
     public class CaptchaNeededException : VkException
     {
         /// <summary>
-        /// Идентификатор капчи
+        /// Капча
         /// </summary>
-        public long Sid { get; private set; }
-
-        /// <summary>
-        /// Url-адрес изображения с капчей
-        /// </summary>
-        public Uri Img { get; private set; }
+		public Captcha.Captcha Captcha { get; private set; }
 
 
 		/// <summary>
 		/// Создания экземпляра <see cref="CaptchaNeededException"/>
 		/// </summary>
-		/// <param name="message">Описание исключения.</param>
-		/// <param name="code">Код ошибки, полученный от сервера ВКонтакте.</param>
-		/// <param name="sid">Сид</param>
-		/// <param name="img">Url-адрес изображения с капчей</param>
-		public CaptchaNeededException(string message, int code, long sid, [NotNull] Uri img) : base(message, code)
+		/// <param name="message">Описание исключения</param>
+		/// <param name="captcha">Описание капчи</param>
+		/// <param name="innerException">Исключение, возникновение которого породило данное исключение</param>
+		public CaptchaNeededException(string message, [NotNull] Captcha.Captcha captcha, System.Exception innerException = null) 
+			: base(message, 14, innerException)  // TODO: introduce code 14 and other vk error codes to an enum
 		{
-			Contract.Requires<ArgumentNullException>(img != null);	
-			
-			Sid = sid;
-            Img = img;
+			Contract.Requires<ArgumentNullException>(captcha != null);
+
+			Captcha = captcha;
+
 		}
     }
 }

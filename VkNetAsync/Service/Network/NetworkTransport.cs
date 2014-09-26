@@ -13,22 +13,22 @@ namespace VkNetAsync.Service.Network
 
 		public async Task<Response> Post(Uri uri, byte[] data = null, CancellationToken token = new CancellationToken())
 		{
-			HttpResponseMessage message = await _client.PostAsync(uri, new ByteArrayContent(data ?? new byte[0]), token);
+			HttpResponseMessage message = await _client.PostAsync(uri, new ByteArrayContent(data ?? new byte[0]), token).ConfigureAwait(false);
 			
 			PrintRequestInfo(message.RequestMessage);
 			PrintResponseInfo(message);
 			
-			return new Response(message.RequestMessage.RequestUri, await message.Content.ReadAsStringAsync());
+			return new Response(message.RequestMessage.RequestUri, await message.Content.ReadAsStringAsync().ConfigureAwait(false));
 		}
 
 		public async Task<Response> Get(Uri uri, CancellationToken token = new CancellationToken())
 		{
-			var message = await _client.GetAsync(uri, token);
+			var message = await _client.GetAsync(uri, token).ConfigureAwait(false);
 
 			PrintRequestInfo(message.RequestMessage);
 			PrintResponseInfo(message);
 			
-			return new Response(message.RequestMessage.RequestUri, await message.Content.ReadAsStringAsync());
+			return new Response(message.RequestMessage.RequestUri, await message.Content.ReadAsStringAsync().ConfigureAwait(false));
 		}
 
 		[Conditional("DEBUG")]
